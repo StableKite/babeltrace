@@ -14,12 +14,10 @@ override_dh_auto_build:
 
 override_dh_auto_install:
 	dh_auto_install
-	for pv in $(PY3V); do \
+	set -e; for pv in $(PY3V); do \
 	  PYTHON=python$${pv} PYTHON_CONFIG=python$${pv}-config dh_auto_configure -- --enable-python-bindings; \
-	  cd bindings/python; \
-	  make clean; \
-	  make install DESTDIR="$(CURDIR)/debian/tmp"; \
-	  cd "$(CURDIR)"; \
+	  $(MAKE) -C bindings/python clean; \
+	  $(MAKE) -C bindings/python install DESTDIR="$(CURDIR)/debian/tmp"; \
 	done
 
 # Force a dependency on libbabeltrace1 (>= 1.5.3-2~) to handle
