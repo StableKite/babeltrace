@@ -1,0 +1,6 @@
+fix-clean-bison-files.patch
+0001-Fix-Hurd-compat-for-PATH_MAX.patch
+cross.patch
+fix-pkgconfig-private-requires.patch
+Fix-handle-NULL-list-pointer-to-avoid-Python-segfaul.patch
+Print-a-clear-error-when-reading-a-CTF-2-trace.patch

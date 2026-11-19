@@ -1,0 +1,26 @@
+Fix the elfutils check to work with cross-compilation.
+
+--- babeltrace-1.5.11.orig/m4/bt_lib_elfutils.m4
++++ babeltrace-1.5.11/m4/bt_lib_elfutils.m4
+@@ -38,18 +38,13 @@
+ 	AC_CACHE_CHECK(
+ 		[for elfutils version >= major_version.minor_version],
+ 		[bt_cv_lib_elfutils], [
+-			AC_RUN_IFELSE([AC_LANG_SOURCE([
+-				#include <stdlib.h>
++			AC_COMPUTE_INT([bt_cv_lib_elfutils],[_ELFUTILS_PREREQ(major_version, minor_version)],[[
+ 				#include <elfutils/version.h>
+-
+-				int main(void) {
+-					return _ELFUTILS_PREREQ(major_version, minor_version) ? EXIT_SUCCESS : EXIT_FAILURE;
+-				}
+-			])], [bt_cv_lib_elfutils=yes], [bt_cv_lib_elfutils=no])
++			]])
+ 		]
+ 	)
+ 
+-	AS_IF([test "x$bt_cv_lib_elfutils" = "xyes"], [true_action], [false_action])
++	AS_IF([test "x$bt_cv_lib_elfutils" = "x1"], [true_action], [false_action])
+ 
+ 	m4_popdef([false_action])
+ 	m4_popdef([true_action])

@@ -21,6 +21,7 @@
 # THE SOFTWARE.
 
 import sys
+import sysconfig
 
 if sys.version_info < (3, 12):
     from distutils.core import setup, Extension
@@ -38,8 +39,10 @@ following command to your .bashrc/.zshrc:
 """
 
 def main():
+    free_threaded = sysconfig.get_config_var('Py_GIL_DISABLED')
     babeltrace_ext = Extension('babeltrace/_babeltrace',
                         sources=['babeltrace/babeltrace.i','babeltrace/python-complements.c'],
+                        swig_opts=['-nogil'] if free_threaded else [],
                         libraries=['babeltrace', 'babeltrace-ctf'],)
 
     dist = setup(name='babeltrace',

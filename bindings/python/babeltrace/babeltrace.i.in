@@ -55,7 +55,23 @@ trace to it."
 #include <babeltrace/ctf-writer/event.h>
 #include <babeltrace/ctf-writer/stream.h>
 #include <babeltrace/ctf-writer/writer.h>
+
+#ifdef Py_GIL_DISABLED
+/* Preserve serialization of the native CTF API for Python callers. */
+static PyMutex babeltrace_mutex;
+#define BABELTRACE_CALL(action) do { \
+	PyMutex_Lock(&babeltrace_mutex); \
+	action \
+	PyMutex_Unlock(&babeltrace_mutex); \
+} while (0)
+#else
+#define BABELTRACE_CALL(action) do { action } while (0)
+#endif
 %}
+
+%exception {
+	BABELTRACE_CALL($action);
+}
 
 typedef unsigned long long uint64_t;
 typedef long long int64_t;
@@ -137,6 +153,9 @@ struct bt_context *bt_ctf_event_get_context(const struct bt_ctf_event *event);
 class TraceCollection:
 	"""
 	The TraceCollection is the object that contains all currently opened traces.
+
+	Use separate collections in separate threads. Synchronize any shared
+	collection together with its iterators, event objects and trace handles.
 	"""
 
 	def __init__(self, intersect_mode=False):

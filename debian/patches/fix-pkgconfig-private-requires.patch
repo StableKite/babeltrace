@@ -1,0 +1,12 @@
+Remove superfluous pkgconfig private requires.
+
+--- a/babeltrace.pc.in
++++ b/babeltrace.pc.in
+@@ -8,7 +8,6 @@
+ Common Trace Format (CTF).
+ Version: @PACKAGE_VERSION@
+ Requires:
+-Requires.private: uuid popt
+ Libs: -L${libdir} -lbabeltrace
+ Cflags: -I${includedir} 
+ 
