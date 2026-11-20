@@ -2,7 +2,7 @@
 # -*- makefile -*-
 
 export DEB_BUILD_MAINT_OPTIONS := hardening=+all
-export DISTSETUPOPTS="--install-layout=deb"
+export DISTSETUPOPTS=--install-lib=/usr/lib/python3/dist-packages
 
 PY3V := $(shell py3versions -vr)
 
